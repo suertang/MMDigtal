@@ -102,13 +102,13 @@ if (typeof encode_version !== 'undefined' && encode_version === 'sojson.v5') {
         while ( !! []) {
             switch (_0xd6483c[_0x1a3127++]) {
             case '0':
-                _0x50cb35 = _0x59f053[_0x5b60('0x2', 'ofbL')](atob, _0x50cb35);
+                _0x50cb35 = _0x59f053[_0x5b60('0x2', 'ofbL')](_atob, _0x50cb35);
                 continue;
             case '1':
                 code = '';
                 continue;
             case '2':
-                return _0x59f053[_0x5b60('0x3', 'mLzQ')](atob, code);
+                return _0x59f053[_0x5b60('0x3', 'mLzQ')](_atob, code);
             case '3':
                 for (i = 0x0; _0x59f053[_0x5b60('0x4', 'J2rX')](i, _0x50cb35[_0x5b60('0x5', 'Z(CX')]); i++) {
                     k = _0x59f053['tPPtN'](i, len);
