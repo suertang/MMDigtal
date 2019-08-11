@@ -1,19 +1,30 @@
 /*
-20190730
+20190811
 suertang
+1. Matrix to list
+2. Add labels for better understanding the content
+3. Make the images avaiable by change http to https
+4. Please issue bug to me if you find any. 
 */
 
 ;
 var encode_version = 'sojson.v5',
 lbbpm = '__0x33ad7',
-__0x33ad7 = ['QMOTw6XDtVE=', 'w5XDgsORw5LCuQ==', 'wojDrWTChFU=', 'dkdJACw=', 'w6zDpXDDvsKVwqA=', 'ZifCsh85fsKaXsOOWg==', 'RcOvw47DghzDuA==', 'w7siYTLCnw==']; (function(_0x94dee0, _0x4a3b74) {
-    var _0x588ae7 = function(_0x32b32e) {
-        while (--_0x32b32e) {
-            _0x94dee0['push'](_0x94dee0['shift']());
+__0x33ad7 = ['QMOTw6XDtVE=', 'w5XDgsORw5LCuQ==', 'wojDrWTChFU=', 'dkdJACw=', 'w6zDpXDDvsKVwqA=', 'ZifCsh85fsKaXsOOWg==', 'RcOvw47DghzDuA==', 'w7siYTLCnw==']; 
+var a=function(arr, arg2) {
+    var f = function(b) {
+        while (--b) {
+            arr['push'](arr['shift']());
         }
     };
-    _0x588ae7(++_0x4a3b74);
-} (__0x33ad7, 0x8f));
+    f(++arg2);
+} 
+
+
+
+a(__0x33ad7, 0x8f);
+//console.log(__0x33ad7)
+
 var _0x5b60 = function(_0x4d4456, _0x5a24e3) {
     _0x4d4456 = _0x4d4456 - 0x0;
     var _0xa82079 = __0x33ad7[_0x4d4456];
@@ -102,13 +113,13 @@ if (typeof encode_version !== 'undefined' && encode_version === 'sojson.v5') {
         while ( !! []) {
             switch (_0xd6483c[_0x1a3127++]) {
             case '0':
-                _0x50cb35 = _0x59f053[_0x5b60('0x2', 'ofbL')](_atob, _0x50cb35);
+                _0x50cb35 = _0x59f053[_0x5b60('0x2', 'ofbL')](atob, _0x50cb35);
                 continue;
             case '1':
                 code = '';
                 continue;
             case '2':
-                return _0x59f053[_0x5b60('0x3', 'mLzQ')](_atob, code);
+                return _0x59f053[_0x5b60('0x3', 'mLzQ')](atob, code);
             case '3':
                 for (i = 0x0; _0x59f053[_0x5b60('0x4', 'J2rX')](i, _0x50cb35[_0x5b60('0x5', 'Z(CX')]); i++) {
                     k = _0x59f053['tPPtN'](i, len);
@@ -258,22 +269,33 @@ $ui.render({
         }
     },
     {
-        type: "matrix",
+        type: "list",
         props: {
-          id: "Video",
-          itemHeight: 280,
-          columns: 2,
-          spacing: 5,
+          
+          rowHeight: 100,
+          
           template: [
             {
               type: "image",
               props: {
-                id: "img",
-                radius: 3
+                id: "image"
               },
-              layout: function(make, view) {
-                make.centerX.equalTo(view.super);
-                make.top.bottom.right.left.inset(3);
+              layout: (make, view) => {
+                make.left.top.bottom.inset(5);
+                make.width.equalTo(view.height);
+              }
+            },
+            {
+              type: "label",
+              props: {
+                id: "label",
+                font: $font("bold", 17),
+                lines: 0
+              },
+              layout: make => {
+                make.left.equalTo($("image").right).offset(10);
+                make.top.bottom.equalTo(0);
+                make.right.inset(10);
               }
             }
           ]
@@ -284,12 +306,13 @@ $ui.render({
         },
         events: {
           didSelect: function(sender, indexPath, data) {
-            geturl(data.url);
+            geturl(data);
           },
           didReachBottom: function(sender) {
             sender.endFetchingMore();
             var page = $cache.get("pg") + 1;
             $cache.set("pg", page);
+            //console.log('OK')
             getdata();
           }
         }
@@ -320,19 +343,7 @@ if (typeof String.prototype.endsWith != 'function') {
     };
 }
 
-function isGif(imgurl){
-    return !imgurl.toLowerCase().endsWith('gif')
-}
-var genGallery = function(urls){
-    let html=''
-    urls=urls.filter(isGif)
-    console.log(urls)
-    for (let i of urls){
-        
-        html += '<img src=' + i + ' /><br /><br />'
-    }
-    return html;
-}
+
 function getdata() {
     var id = $cache.get("id")
     var pg = $cache.get("pg")
@@ -354,29 +365,49 @@ function getdata() {
             if (pg == 1) {
                 var data = [];
               } else {
-                var data = $("Video").data;
+                var data = $("list").data;
             }
             for (let video of videourls) {
                 //console.log(video)
                 //http://img2.t6k.co/thumb/328522.jpg
-                const imgurl = getimgsrcsolo(video).replace(/\d_/,'');
+                const imgurl = getimgsrcsolo(video).replace(/\d_/,'').replace(/^http\:/,'https:');
                 //console.log('img'+imgurl);
                 const videokey = video.match(/viewkey=(\S*)&/)[1]
                 //console.log(videokey);
-                
+                const label = video.match(/title="(\S*)"/)[1]
                 //videourl = turl + "view_video.php?viewkey=" + videourl; 
                   data.push({
-                    img: {
+                    image: {
                       src: imgurl
+                    },
+                    label:{
+                        text: label
                     },
                     url: videokey        
                     });
               }
-              $("Video").data = data;
-              $("Video").endRefreshing();
+              $("list").data = data;
+              //renderItems($("list").data);
+              $("list").endRefreshing();
         }
     })
 }
+
+function renderItems(items) {
+    var list = $("list");
+    list.data = items.map(item => {
+      return {
+        label: {
+          text: item.label
+        },
+        image: {
+          src: item.image.src
+        },
+        url: item.url
+      };
+    });
+    list.endRefreshing();
+  }
 
 getdata()
 function random_ip(){
@@ -388,11 +419,11 @@ function random_ip(){
     return randomIP.join('.')
 }
 
-function geturl(key){
+function geturl(item){
     //获取真实的视频地址，带key
     //let url=''
     $http.get({
-        url: urlt + "view_video.php?viewkey=" + key,        
+        url: urlt + "view_video.php?viewkey=" + item.url,        
         header: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
             'X-Forwarded-For':random_ip(),
@@ -406,12 +437,16 @@ function geturl(key){
           //let videourl = eval(code);
           const pars = code.match(/"(.*?)"/g);
           removequotes(pars)
-          console.log(pars)
+          //console.log(pars)
           let videourl = strencode(pars[0],pars[1],pars[2]);
-          console.log(videourl);   
+          //console.log(videourl);   
           videourl = videourl.match(/<source src=\'(.*?)\' type=\'video\/mp4\'>/)[1];
-          console.log(videourl)
-          play(videourl);
+          //console.log(videourl)
+          play({
+              text:item.label.text,
+              url:videourl,
+              image:item.image.src
+        });
         }
       })
 }
@@ -422,20 +457,55 @@ function removequotes(arr){
 }
  
 
-function play(url) {
+function play(item) {
     $ui.push({
       props: {
         title: "91飞车"
       },
       views: [
         {
-          type: "web",
-          props: {
-            id: "bof",
-            url: url
+            type: "label",
+            id:"title",
+            props: {
+              text: item.text
+            },
+            layout: function(make, view) {
+              make.left.right.insets(10)
+              
+              //make.height.equalTo(80)
+            }
           },
-          layout: $layout.fill
-        }
+        {
+            type: "video",
+            id:"player",
+            props: {
+              src: item.url,
+              poster: item.image
+            },
+            layout: function(make, view) {
+                make.top.equalTo(90)
+                make.left.right.equalTo(0)
+              
+                make.height.equalTo(256)
+            }
+          },
+          {
+            type: "button",
+            props: {
+              title: "使用玩客云下载"
+            },
+            layout: function(make, view) {
+                make.top.equalTo(346)
+                make.left.right.insets(10)              
+              //make.height.equalTo(256)
+            },
+            events:{
+                tapped : (sender) => {
+                    $clipboard.text='thunder://' + $text.base64Encode("AA"+item.url+"ZZ");
+                    $app.openURL("wky://");
+                }
+            }
+          }
       ]
     });
   }
