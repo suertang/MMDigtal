@@ -12,11 +12,11 @@ var me = [
   //
 ]; 
 var retryCount = 0;
-var turl = 'https://www.' + "japonx.me";
+var turl = 'https://www.' + $text.base64Decode("amFwb254Lm1l");
 //console.log(turl);
 
 function getweburl(id,img){
-  console.log("https://www.japonx.me" + "/portal/index/ekzloi.html?identification=" + id);
+  console.log("https://www."+ $text.base64Decode("amFwb254Lm1l") + "/portal/index/ekzloi.html?identification=" + id);
   $ui.push({
     views:[{
       type: "web",
@@ -25,21 +25,12 @@ function getweburl(id,img){
           ua:'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Version/12.0 Safari/604.1',
           url:turl + "/portal/index/detail/identification/" + id + ".html",
           script: function(){
-            //alert("Hello World");
-            //alert(window.location.href);
-
-            var script = document.createElement("script")
-            script.type = "text/javascript"
-            script.src = "//libs.baidu.com/jquery/2.0.0/jquery.min.js"
-            script.onload = function(){}
-            document.body.appendChild(script)
-
-            //var jq=$.noConflict();
+            
 
             const id=window.location.href.match(/identification\/(.*)\.html/)[1];
             //alert(id);
             $.get(
-              'https://www.japonx.me/portal/index/ekzloi.html',{'identification':id},
+              'https://www.'+atob("amFwb254Lm1l")+'/portal/index/ekzloi.html',{'identification':id},
               function(res){
                 //alert(res);          
                 $notify("bypassed",res);                
