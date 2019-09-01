@@ -1,8 +1,8 @@
 /*
 作者 suertang
-日期 2019/09/01
-版本 0.4
-ISSUE 修复首页问题
+日期 2019/09/01 晚22 点
+版本 0.5
+ISSUE 修复不能播放的问题
 */
 
 var me = [
@@ -11,9 +11,85 @@ var me = [
   { name: "最新", id: "/new/1.html" }
   //
 ]; 
-
-var turl = 'https://' + "www.japonx.me"
+var retryCount = 0;
+var turl = 'https://www.' + "japonx.me";
 //console.log(turl);
+
+function getweburl(id,img){
+  console.log("https://www.japonx.me" + "/portal/index/ekzloi.html?identification=" + id);
+  $ui.push({
+    views:[{
+      type: "web",
+      props: {
+          id:'myweb',
+          ua:'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Version/12.0 Safari/604.1',
+          url:turl + "/portal/index/detail/identification/" + id + ".html",
+          script: function(){
+            //alert("Hello World");
+            //alert(window.location.href);
+
+            var script = document.createElement("script")
+            script.type = "text/javascript"
+            script.src = "//libs.baidu.com/jquery/2.0.0/jquery.min.js"
+            script.onload = function(){}
+            document.body.appendChild(script)
+
+            //var jq=$.noConflict();
+
+            const id=window.location.href.match(/identification\/(.*)\.html/)[1];
+            //alert(id);
+            $.get(
+              'https://www.japonx.me/portal/index/ekzloi.html',{'identification':id},
+              function(res){
+                //alert(res);          
+                $notify("bypassed",res);                
+                },'text'
+              );
+              
+          }
+      },
+      layout: $layout.fill,
+      /*layout: function(make,view) {
+          
+          //make.size.equalTo($size())
+          //make.bottom.left.right.inset(0);
+        },*/
+      events: {
+          bypassed: function (obj){
+                  //renderItems(obj)
+                  //$('list').data=obj;
+                  $('myweb').stopLoading()
+                  $('myweb').remove()
+                  
+                  var fg1 = obj.split("p}('")[1];
+                  var fg2 = fg1.split("}});")[0] + "}});";
+                  var k = "|" + obj.match(/,'\|(\S*?).split/)[1];
+                  var tk = k.split("|");
+                  var ac = obj.match(/}\);',(\S*?),/)[1];
+                  var url=urljs(tk, ac, fg2);
+                  //console.log("notify:",obj)
+                  vid(url,img)
+                  return
+              
+      
+          },
+          didSendRequest: function(request) {
+            var method = request.method
+            var url = request.url
+            var header = request.header
+            var body = request.body
+            console.log(url)
+          }
+      }
+    }
+  ]
+});
+}
+function sleep(ms) {
+  return new Promise(resolve => 
+      setTimeout(resolve, ms)
+  )
+}
 $ui.render({
   props: {
     title: "狩都高速 tzj"
@@ -66,8 +142,9 @@ $ui.render({
       },
       events: {
         didSelect: function(sender, indexPath, data) {
-          geturl(data.url,data.img.src);
-          
+          //geturl(data.url,data.img.src);
+          getweburl(data.url,data.img.src)
+          //sleep(3000).then(()=>{geturl(data.url,data.img.src)});
         },
         didReachBottom: function(sender) {
           sender.endFetchingMore();
@@ -129,40 +206,7 @@ function getdata() {
   });
 }
 getdata();
-function geturl(id,img) {
-  $ui.loading(true);
-  $http.get({
-    
-    timeout:3,
-    url: turl + "/portal/index/ajax_get_js.html?identification=" + id,
-    handler: function(resp) {
-      
-    if(resp.error){
-            console.log(resp.error);
-            $ui.toast(resp.error.localizedDescription);
-            $ui.loading(false)
-            return
-          }
-          //console.log()
-      $ui.loading(false);
-      var arr = resp.data;
-      //console.log(arr)
-      var fg1 = arr.split("p}('")[1];
-      var fg2 = fg1.split("}});")[0] + "}});";
-      var k = "|" + arr.match(/,'\|(\S*?).split/)[1];
-      var tk = k.split("|");
-      var ac = arr.match(/}\);',(\S*?),/)[1];
-      var url=urljs(tk, ac, fg2);
-      console.log("from geturl",url)
-      console.log(id)
-      
-      console.log(tk)
-      console.log(ac)
-      console.log(fg2)
-      vid(url,img)
-    }
-  });
-}
+
 
 function urljs(tk, ac, fg2) {
   var aa = (function(p, a, c, k, e, d) {
@@ -235,3 +279,4 @@ function play(url) {
     ]
   });
 }
+
