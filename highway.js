@@ -1,5 +1,10 @@
-/*2019 08 03*/
-/*by suertang */
+/*
+作者 suertang
+日期 2019/09/01
+版本 0.4
+ISSUE 修复首页问题
+*/
+
 var me = [
   { name: "推荐资源", id: "/recom/1.html?recom=1" },
   { name: "人气热门", id: "/hot/1.html?hot=1" },
@@ -7,11 +12,11 @@ var me = [
   //
 ]; 
 
-var turl = 'https://' + $text.base64Decode("d3d3LmphcG9ueC5tZQ==");
-
+var turl = 'https://' + "www.japonx.me"
+//console.log(turl);
 $ui.render({
   props: {
-    title: "狩都高速 MOD"
+    title: "狩都高速 tzj"
   },
   views: [
     {
@@ -61,7 +66,8 @@ $ui.render({
       },
       events: {
         didSelect: function(sender, indexPath, data) {
-          geturl(data.url);
+          geturl(data.url,data.img.src);
+          
         },
         didReachBottom: function(sender) {
           sender.endFetchingMore();
@@ -79,21 +85,25 @@ function getdata() {
   var type = $cache.get("type");
   $ui.loading(true);
   $http.get({
-    timeout:5,
+    timeout:3,
     url: turl + "/portal/index/search" + type + "&page=" + page,
-    handler: function(resp) {
-      
-      $ui.loading(false);
+    handler: function(resp) {      
       if(resp.error){
-          $ui.toast(resp.error.localizedDescription)
-          return
+        console.log(resp.error);
+        $ui.toast(resp.error.localizedDescription);
+        $ui.loading(false)
+        return
       }
+      $ui.loading(false);
       var arr = resp.data;
       var html = arr.replace(/\n|\s|\r/g, "");
-      var te = html.match(/<ulid="works"[\s\S]*?<\/ul>/)[0];
-
+      var te = html.match(/<ulid="works"[\s\S]*?<\/ul>/)
+      if(te){te=te[0]}else{
+        $chche.set("page",$cache.get('page')+1);
+        getdata();
+        return
+      };
       var li = te.match(/<li><ahref=\S*?<\/a>/g);
-
       if (page == 1) {
         var data = [];
       } else {
@@ -119,17 +129,22 @@ function getdata() {
   });
 }
 getdata();
-function geturl(id) {
+function geturl(id,img) {
   $ui.loading(true);
   $http.get({
-    timeout:5,
+    
+    timeout:3,
     url: turl + "/portal/index/ajax_get_js.html?identification=" + id,
     handler: function(resp) {
+      
+    if(resp.error){
+            console.log(resp.error);
+            $ui.toast(resp.error.localizedDescription);
+            $ui.loading(false)
+            return
+          }
+          //console.log()
       $ui.loading(false);
-      if(resp.error){
-          $ui.toast(resp.error.localizedDescription)
-          return
-      }
       var arr = resp.data;
       //console.log(arr)
       var fg1 = arr.split("p}('")[1];
@@ -137,7 +152,14 @@ function geturl(id) {
       var k = "|" + arr.match(/,'\|(\S*?).split/)[1];
       var tk = k.split("|");
       var ac = arr.match(/}\);',(\S*?),/)[1];
-      urljs(tk, ac, fg2);
+      var url=urljs(tk, ac, fg2);
+      console.log("from geturl",url)
+      console.log(id)
+      
+      console.log(tk)
+      console.log(ac)
+      console.log(fg2)
+      vid(url,img)
     }
   });
 }
@@ -173,13 +195,33 @@ function urljs(tk, ac, fg2) {
   })(fg2, ac, ac, tk, 0, {});
   var url = aa.match(/url:\\'(\S*?)\\'/)[1];
   url = url.replace(/'/g, "");
-  play(url);
+  //console.log(url,img);
+  //$app.openURL("thunder://"+url);
+  //play(url);
+  //vid(url,img)
+  //return(url)
+  //console.log("from urljs",url)
+  return url
 }
-
+function vid(url,poster){
+  $ui.push({props:{title:"like"},
+  views:[{
+    type: "video",
+    props: {
+      src: url,
+      poster: poster
+    },
+    layout: function(make, view) {
+      make.left.right.equalTo(0)
+      make.centerY.equalTo(view.super)
+      make.height.equalTo(256)
+    }
+  }]})
+}
 function play(url) {
   $ui.push({
     props: {
-      title: "狩都高速 MOD"
+      title: "狩都高速 tzj"
     },
     views: [
       {
@@ -193,4 +235,3 @@ function play(url) {
     ]
   });
 }
-
