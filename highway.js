@@ -1,7 +1,7 @@
 /*
 作者 suertang
-日期 2019/09/01 晚22 点
-版本 0.5
+日期 2019/09/04 晚22 点
+版本 0.6
 ISSUE 修复不能播放的问题
 */
 
@@ -167,7 +167,7 @@ function getdata() {
       var html = arr.replace(/\n|\s|\r/g, "");
       var te = html.match(/<ulid="works"[\s\S]*?<\/ul>/)
       if(te){te=te[0]}else{
-        $chche.set("page",$cache.get('page')+1);
+        $cache.set("page",$cache.get('page')+1);
         getdata();
         return
       };
