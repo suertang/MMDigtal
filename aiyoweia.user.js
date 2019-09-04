@@ -5,6 +5,8 @@
 // @description  Skip aiyoweia search engine
 // @author       suertang
 // @match        *://www.aiyoweia.com/*.shtml
+// @updateURL    https://github.com/suertang/MMDigtal/raw/master/aiyoweia.user.js
+// @downloadURL  https://github.com/suertang/MMDigtal/raw/master/aiyoweia.user.js
 // @grant        none
 // ==/UserScript==
 
