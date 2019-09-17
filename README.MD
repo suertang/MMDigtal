@@ -31,5 +31,8 @@
 ````一个使用Excel看股票行情的xls文件。可以解放你的手机和脖子。````
 * [zhuzhupan.user.js](https://github.com/suertang/MMDigtal/raw/master/zhuzhupan.user.js) 	
 ````一个tampermonkey脚本，用于破解猪猪盘单日会员。````
+* [Ciliso.js](https://github.com/suertang/MMDigtal/raw/master/Ciliso.js)
+````一个iOS APP JS-Box 的脚本，用于搜索磁力链接，并推送至玩客云。````
+
 
 Enjoy!
