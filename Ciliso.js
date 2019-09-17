@@ -1,3 +1,4 @@
+
 class Ciliso{
   constructor(){
     this.page = 1;
@@ -77,12 +78,12 @@ var app = new Ciliso();
         },
         events: {
           didSelect: function(sender, indexPath, data) {
-            console.log(data.hash)
+            //console.log(data.hash)
             $clipboard.text="magnet:?xt=urn:btih:"+data.hash;
             $device.taptic(1);
             if(!$app.openURL("wky://")){
               
-              toast("磁力链接已复制");
+              $ui.toast("磁力链接已复制");
             }
           },
           didReachBottom:function(sender){
@@ -104,13 +105,13 @@ function fetchData(app){
   //var torrents;
   var {query,page} = app.get_data();
   query=$text.URLEncode(query);
-  console.log(`https://69cili.xyz/search-${query}-1-0-${page}.html`);
+  //console.log(`https://69cili.xyz/search-${query}-1-0-${page}.html`);
   //`https://69cili.xyz/search-${query}-1-0-${page}.html`
   $http.get({
     url: `https://69cili.xyz/search-${query}-1-0-${page}.html`,
     handler: function(resp) {
       var data = resp.data;
-      console.log(data)
+      //console.log(data)
       torrents = page==1?[]:$("list").data
       //console.log([1,2,3].concat([3,4,5]))
       const res = data.match(/\/hash.*?<\/a>?/g).map((i)=>{
@@ -122,10 +123,13 @@ function fetchData(app){
         }
       })
       torrents = torrents.concat(res)
-      console.log(torrents)
+      //console.log(torrents)
       $("list").data = torrents
       //listView.data=torrents;
     }
   });
   
 };
+
+
+
