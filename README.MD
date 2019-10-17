@@ -28,7 +28,7 @@
 * [unlimitxiaoke.js](https://github.com/suertang/MMDigtal/raw/master/unlimitxiaoke.js) 
 ````一个tampermonkey脚本，用于小可搜搜以及去转盘网站自动获取百度网盘链接并自动跳转的脚本。````
 * [stock.xlsm](https://github.com/suertang/MMDigtal/raw/master/stock.xlsm) 
-````一个使用Excel看股票行情的xls文件。可以解放你的手机和脖子。````
+````一个使用Excel看股票行情的Excel文件。可以解放你的手机和脖子。````
 * [zhuzhupan.user.js](https://github.com/suertang/MMDigtal/raw/master/zhuzhupan.user.js) 	
 ````一个tampermonkey脚本，用于破解猪猪盘单日会员。````
 * [Ciliso.js](https://github.com/suertang/MMDigtal/raw/master/Ciliso.js)
