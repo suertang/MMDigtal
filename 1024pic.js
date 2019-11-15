@@ -4,7 +4,8 @@ suertang
 */
 $cache.set("id", "16")
 $cache.set("pg", 1)
-var urlt = "https://cc.2tj4.icu/"
+var urlt = "https://cl.kowsx.com/"
+//var urlt = "https://t66y.com/"
 var data = [{ "name": "达盖尔的旗帜", "id": "16" }, 
             { "name": "新时代的我们", "id": "8" }, ]
 
@@ -78,9 +79,14 @@ function getdata() {
         handler: function (resp) {
             $ui.loading(false)
             var text = resp.data.replace(/\n|\s|\r/g, "")
-            if (text.indexOf('普通主题') !== -1) {
-                text = text.split("普通主题")[1]
+            console.log("text length before split",text.length)
+            //if (text.indexOf("普通主题") !== -1) {
+            //console.log("找到普通主题")
+            if (text.indexOf("<trclass=\"tr2\">") !== -1) {
+                const para = text.split("<trclass=\"tr2\">")
+                text = para[para.length-1]
             }
+            console.log("text length after split",text.length)
             var shu = text.match(/class="tr3t_onetac">(\S*?)<\/h3>/g)
             var data
             if (pg == 1) {
@@ -107,7 +113,8 @@ function getdata() {
 
 getdata()
 function  getimgsrc(htmlstr){
-    var reg=/<input.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/gim;
+    console.log(htmlstr)
+    var reg=/<[input|img].+?(?:data-)?src=('|")?([^'"]+)('|")?(?:\s+|>)/gim;
     var arr = [];
     var tem=reg.exec(htmlstr)
     while(tem != null){
@@ -149,7 +156,7 @@ function geting(id, mc) {
         url: urlt +""+ id,
         handler: function (resp) {
             $ui.loading(false)
-            var text = resp.data.match(/<div class="tpc_content do_not_catch">[\s\S]*?<\/table>/)
+            var text = resp.data.match(/<div class="tpc_content do_not_catch">[\s\S]*?<tr class="tr1">/)
             console.log(resp.data)
             //text = text[0].replace('class="tpc_cont">', "")//.replace(/([0-9a-zA-Z]{40})/g,'<a href="magnet:?xt=urn:btih:'+'$1'+'">'+'$1'+'</a>');
             
