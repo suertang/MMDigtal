@@ -4,7 +4,7 @@ suertang
 */
 $cache.set("id", "16")
 $cache.set("pg", 1)
-var urlt = "https://cl.kowsx.com/"
+var urlt = "https://cc.2tj4.icu/"
 //var urlt = "https://t66y.com/"
 var data = [{ "name": "达盖尔的旗帜", "id": "16" }, 
             { "name": "新时代的我们", "id": "8" }, ]
@@ -36,7 +36,10 @@ make.width.equalTo(view.width)
     },
     {
         type: "list",
-        layout: $layout.fill,
+        layout: function(make,view){make.top.equalTo($("meun").bottom)
+        make.left.right.inset(10)
+        make.height.equalTo(view.super.height)
+        },
         props:{
           rowHeight:80,
           template:[{
@@ -79,9 +82,8 @@ function getdata() {
         handler: function (resp) {
             $ui.loading(false)
             var text = resp.data.replace(/\n|\s|\r/g, "")
-            console.log("text length before split",text.length)
-            //if (text.indexOf("普通主题") !== -1) {
-            //console.log("找到普通主题")
+            //console.log("text length before split",text.length)
+            //filter
             if (text.indexOf("<trclass=\"tr2\">") !== -1) {
                 const para = text.split("<trclass=\"tr2\">")
                 text = para[para.length-1]
@@ -128,11 +130,7 @@ if (typeof String.prototype.endsWith != 'function') {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
 }
-/*
-function isGif(imgurl){
-    return !imgurl.toLowerCase().endsWith('gif')
-}
-*/
+
 var genGallery = function(urls){
     //let html=''
     //urls=urls.filter(isGif)
@@ -157,22 +155,11 @@ function geting(id, mc) {
         handler: function (resp) {
             $ui.loading(false)
             var text = resp.data.match(/<div class="tpc_content do_not_catch">[\s\S]*?<tr class="tr1">/)
-            console.log(resp.data)
-            //text = text[0].replace('class="tpc_cont">', "")//.replace(/([0-9a-zA-Z]{40})/g,'<a href="magnet:?xt=urn:btih:'+'$1'+'">'+'$1'+'</a>');
-            
-            //var mag=text.match(/hash=1\d\d([0-9a-zA-Z]{40})/);
-
-            //const regimg = /<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\1[^>]*?\/?\s*>/g;
-
+           
             const imgs = getimgsrc(text)//.match(regimg);
-
-            console.log(imgs);
-            //var shu = $detector.link(text);
-            //var url = shu[shu.length - 2]
 
             const html = genGallery(imgs)
             console.info(html)
-            //var html = `<html><head><meta charset="UTF-8"><title>${mc}</title><style> body,div{ font-size:42px;} </style> </head><body><div>${text}</body></html>`
             $ui.push({
               props:{title:mc},
             views:[{
@@ -189,22 +176,7 @@ function geting(id, mc) {
   }
 }]
 })
-/*
-            $ui.push({
-                props: {
-                    title: mc
-                },events:{touchesBegan: function(sender, location) {
-                        console.log("moved");}
-                        },
-                views: [{
-                    type: "web",
-                    props: {
-                        html: html,
-                    },
-                    layout: $layout.fill
-                }]
-            })
-            */
+
         }
     })
 }
