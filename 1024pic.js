@@ -1,11 +1,11 @@
 /*
-20191114
-suertang
+20191123
+采用了list纵向显示图片。
 */
 $cache.set("id", "16")
 $cache.set("pg", 1)
 var urlt = "https://cc.2tj4.icu/"
-//var urlt = "https://t66y.com/"
+
 var data = [{ "name": "达盖尔的旗帜", "id": "16" }, 
             { "name": "新时代的我们", "id": "8" }, ]
 
@@ -49,8 +49,9 @@ make.width.equalTo(view.width)
                 font:$font(14),
                 lines:0
               },
-              layout:make=>{
+              layout:(make,view)=>{
                   make.left.right.inset(10)
+make.width.equalTo(view.width)
                   make.top.bottom.equalTo(0)
 
                   //make.right.inset(10)
@@ -82,8 +83,9 @@ function getdata() {
         handler: function (resp) {
             $ui.loading(false)
             var text = resp.data.replace(/\n|\s|\r/g, "")
-            //console.log("text length before split",text.length)
-            //filter
+            console.log("text length before split",text.length)
+            //if (text.indexOf("普通主题") !== -1) {
+            //console.log("找到普通主题")
             if (text.indexOf("<trclass=\"tr2\">") !== -1) {
                 const para = text.split("<trclass=\"tr2\">")
                 text = para[para.length-1]
@@ -130,18 +132,19 @@ if (typeof String.prototype.endsWith != 'function') {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
 }
-
+/*
+function isGif(imgurl){
+    return !imgurl.toLowerCase().endsWith('gif')
+}
+*/
 var genGallery = function(urls){
     //let html=''
     //urls=urls.filter(isGif)
     //console.log(urls)
     var g=[]
     for (let i of urls){
-        g.push({
-          type:"image",
-          props:{
-            src:i
-            }
+        g.push(
+            {"ima":{"src":i}
         })
         //html += '<img src=' + i + ' /><br /><br />'
     }
@@ -155,29 +158,46 @@ function geting(id, mc) {
         handler: function (resp) {
             $ui.loading(false)
             var text = resp.data.match(/<div class="tpc_content do_not_catch">[\s\S]*?<tr class="tr1">/)
-           
             const imgs = getimgsrc(text)//.match(regimg);
 
+            console.log(imgs);
+           
             const html = genGallery(imgs)
             console.info(html)
             $ui.push({
-              props:{title:mc},
-            views:[{
-  type: "gallery",
-  props: {
-    items: html,
-    interval: 3,
-    radius: 5.0
-  },
-  layout: function(make, view) {
-    make.left.right.inset(10)
-    make.centerY.equalTo(view.super)
-    make.height.equalTo(320)
-  }
-}]
-})
-
-        }
-    })
+              props:{
+                title:mc,
+                //data:imgs
+                },
+            views:[
+                {
+                    type: "list",
+                    
+                    props:{
+                      id:'ga',
+                      data:html,
+                      rowHeight:600,
+                      template:[{                        
+                            type: "image",
+                            props:{
+                                id:"ima"
+                            },
+                            layout: function(make, view) {
+                              make.center.equalTo(view.super)
+                              make.size.equalTo($size(600, 480))
+                            }
+                        }]
+                    },
+                    layout: function(make,view){
+                        make.top.equalTo($("meun").bottom)
+                        make.left.right.inset(10)
+                        make.height.equalTo(view.super.height)
+                    }
+                }]      
+            
+        })
+    
 }
 
+})
+}
