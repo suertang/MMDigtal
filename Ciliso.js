@@ -44,7 +44,7 @@ var app = new Ciliso();
             fetchData(app);
             //$("list").data = app.data
             sender.blur();
-            sender.text = "";
+            //sender.text = "";
           }
         }
       },
@@ -62,10 +62,11 @@ var app = new Ciliso();
                 type: "label",
                 props: {
                   id: "label",
-                  bgcolor: $color("#474b51"),
-                  textColor: $color("#abb2bf"),
+                  //bgcolor: $color("#474b51"),
+                  //textColor: $color("#abb2bf"),
                   //align: $align.center,
-                  font: $font(12)
+                  font: $font(12),
+                  line:0
                 },
                 layout: $layout.fill
               }
@@ -78,7 +79,7 @@ var app = new Ciliso();
         },
         events: {
           didSelect: function(sender, indexPath, data) {
-            //console.log(data.hash)
+            console.log(data.hash)
             $clipboard.text="magnet:?xt=urn:btih:"+data.hash;
             $device.taptic(1);
             if(!$app.openURL("wky://")){
@@ -105,25 +106,34 @@ function fetchData(app){
   //var torrents;
   var {query,page} = app.get_data();
   query=$text.URLEncode(query);
+  //http://www.clb.biz/s/百度网盘_rel_2.html
   //console.log(`https://69cili.xyz/search-${query}-1-0-${page}.html`);
   //`https://69cili.xyz/search-${query}-1-0-${page}.html`
   $http.get({
-    url: `https://69cili.xyz/search-${query}-1-0-${page}.html`,
+    url: `http://www.clb.biz/s/${query}_rel_${page}.html`,
     handler: function(resp) {
       var data = resp.data;
-      //console.log(data)
-      torrents = page==1?[]:$("list").data
+      var respcode = resp.response.statusCode;
+      //console.info(respcode)
+      //var err = resp.error;
+      console.info(resp.response.headers)
+      if(respcode==500){
+        $ui.toast("服务器错误")
+        return
+      }
+      console.log(data)
+      let torrents = page==1?[]:$("list").data
       //console.log([1,2,3].concat([3,4,5]))
-      const res = data.match(/\/hash.*?<\/a>?/g).map((i)=>{
+      const res = data.match(/\/detail.*?<\/a>?/g).map((i)=>{
         return {          
           "label":{
-            "text":i.match(/<span> (.*?)<\/span><\/a>/)[1].replace(/<\/?span.*?>/g,"")
+            "text":i.match(/blank">(.*?)<\/a>/)[1].replace(/<\/?em.*?>/g,"")
           },
-          "hash":i.match(/hash\/(.*?).html/)[1],
+          "hash":i.match(/detail\/(.*?).html/)[1],
         }
       })
       torrents = torrents.concat(res)
-      //console.log(torrents)
+      console.log(torrents)
       $("list").data = torrents
       //listView.data=torrents;
     }
