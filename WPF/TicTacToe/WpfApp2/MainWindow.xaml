@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="450" Loaded="MainWindow_Loaded" >
+    
+    <Grid>
+        <Grid.ColumnDefinitions>            
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0"  Grid.Column ="0" FontSize="48" Foreground="Green" Background="White" x:Name="btn00"  >X</Button>
+        <Button Grid.Row="0"  Grid.Column ="1" FontSize="48" Foreground="Red" Background="White" Content="O" x:Name="btn01" />
+        <Button Grid.Row="0"  Grid.Column ="2" FontSize="48" Foreground="Green" Background="White" x:Name="btn02" Content="X"/>
+        <Button Grid.Row="1"  Grid.Column ="0" FontSize="48" Foreground="Green" Background="White" x:Name="btn10" Content="X" />
+        <Button Grid.Row="1"  Grid.Column ="1" FontSize="48" Foreground="Green" Background="White" x:Name="btn11" Content="X"/>
+        <Button Grid.Row="1"  Grid.Column ="2" FontSize="48" Foreground="Green" Background="White" x:Name="btn12" Content="X"/>
+        <Button Grid.Row="2"  Grid.Column ="0" FontSize="48" Foreground="Green" Background="White" x:Name="btn20" Content="X"/>
+        <Button Grid.Row="2"  Grid.Column ="1" FontSize="48" Foreground="Green" Background="White" x:Name="btn21" Content="X"/>
+        <Button Grid.Row="2"  Grid.Column ="2" FontSize="48" Foreground="Green" Background="White" x:Name="btn22" Content="X"/>
+
+    </Grid>
+</Window>
