@@ -36,17 +36,5 @@
 
 
 
-# 1024 广告去除
-* uBlock origin 静态规则
-  *htm_data*$inline-script
-* 脚本
-````
-    /// 1024 开始随机产生img的src
-    const src = document.body.textContent.match(/img\[(.*?)\]/)[1];
-    //console.log(src);
-    //document.querySelectorAll('img[data-ssc]').forEach(i=>{i.src=i.dataset.ssc.replace(/^http:/,'https:')});
-    document.querySelectorAll('img[' + src +']').forEach(i=>{i.src=i.getAttribute(src).replace(/^http:/,'https:')});
-    document.querySelectorAll('div.tpc_content.do_not_catch a').forEach(i=>{i.href=i.href.replace(/https?:\/\/www.viidii.info\/\?(\S*?)&z/,"$1").replace(/______/g,".")})
-````
 
 Enjoy!
