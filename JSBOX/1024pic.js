@@ -162,7 +162,7 @@ var genGallery = function(urls,mc){
         //})
         imgs += '<img style="width:100%;height:auto" src=' + i + ' /><br /><br />'
     }
-     let html=`<html><head><meta name=”viewport” content=”width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.0, user-scalable=yes” /><meta charset="UTF-8"><title>${mc}</title></head><body>${imgs}</body></html>`
+     let html=`<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.0, user-scalable=yes" /><meta charset="UTF-8"><title>${mc}</title></head><body>${imgs}</body></html>`
     return html;
     //return g;
 }
