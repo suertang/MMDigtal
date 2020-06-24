@@ -229,7 +229,7 @@ function loadPage(url, title) {
             <body>
             <div class="title">${title}</div>
                 ${ingz}
-            <div class="nomore" id="nomore">没有更多了</div>
+            <div class="nomore" id="nomore">到底了</div>
             </body>
             </html>
            `;
