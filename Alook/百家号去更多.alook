@@ -1,0 +1,10 @@
+{
+  "regex" : "baijiahao.baidu.com",
+  "version" : "1.0",
+  "name" : "百家号去更多",
+  "match" : 0,
+  "author" : "suertang",
+  "code" : "Ly\/lm6DkuLrpmpDol4\/lj5HnlJ\/lnKjpobXpnaLovb3lhaXkuYvlkI7vvIzmiYDku6Xlv4XpobvnrYnpmpDol4\/nu5PmnZ\/lkI7lho3osIPnlKjmraTohJrmnKzvvIzmiYvliqjlu7bml7Y4MDBtcwpzZXRUaW1lb3V0KCgpPT57Ci8v5pi+56S65YWo6YOoCmNvbnN0IGRpdiA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi5tYWluQ29udGVudCIpOwovL2FsZXJ0KCLmn6Xmib7liLDkuobvvJ8iK2Rpdj8idHJ1ZSI6ImZhbHNlIik7CmRpdi5zdHlsZS5oZWlnaHQ9IjEwMCUiOwpkaXYuc3R5bGUub3ZlcmZsb3c9IiI7Ci8v5Y676Zmk6L+Y5Ymp5aSa5bCR55qE5oyJ6ZKuCmRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi51bmZvbGRGdWxsVGV4dCIpLnN0eWxlLmRpc3BsYXk9Im5vbmUiOwp9LDgwMCk7",
+  "info" : "去除百家号点击更多",
+  "runat" : 0
+}

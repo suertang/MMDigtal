@@ -49,7 +49,7 @@ function loadPage(url, title) {
             $ui.toast("没有获取图片属性")
             return
         }
-        // 获取图片地址的正则表达式        
+        // 获取图片地址的正则表达式         
         const imgReg = new RegExp(attr+"='(.*?)'","g")
 
         var text = resp.data.replace(/\n|\s|\r/g, "");
@@ -62,7 +62,8 @@ function loadPage(url, title) {
         const style = `
                 <style>
                 body{
-                box-sizing:border-box
+                  box-sizing:border-box;
+                  margin:0px
                 }
                 img{
                     width:100%;
@@ -70,16 +71,25 @@ function loadPage(url, title) {
                     margin-bottom:1rem;
                     border-radius:0.5rem;
                 }
-                .nomore,.title{
+                .nomore{
                     display:flex;
                     justify-content:center;
                     align-items:center;
                     height:16vh;
                 }
-                .title{
-                    height:auto;
-                    
-                    
+                .head{
+                    display:block;                    
+                    width:100vw;
+                    position:fixed;
+                    top:0px;
+                    background:lightblue;                 
+                    opacity:0.75;
+                    margin-top:0px;
+                    padding:0px;
+                }
+                .container{
+                    margin-top:5rem;
+                    min-height:100vh;
                 }
                 </style>
                 `;
@@ -94,8 +104,10 @@ function loadPage(url, title) {
                 
                 </head>
                 <body>
-                <div class="title">${title}</div>
+                <div class="head">${title}</div>
+                <div class="container">
                     ${ingz}
+                </div>
                 <div class="nomore" id="nomore">到底了</div>
                 </body>
                 </html>
@@ -182,21 +194,34 @@ function getdata() {
                     'User-Agent': "mozilla/5.0 (iphone; cpu iphone os 11_0 like mac os x) applewebkit/604.1.38 (khtml, like gecko) version/11.0 mobile/15a372 safari/604.1"},
         handler: function (resp) {
             $ui.loading(false)
+            
+            let data = pg==1?[]:$("list").data
+
+            /**************
             var text = resp.data.replace(/\n|\s|\r/g, "")
             if(text.indexOf("普通主題") !== -1) {
                 const para = text.split("普通主題")
                 text = para[para.length-1]
             }
             const reg = /(htm_data.*?)".*id="">(<.*?>)?(.*?)(<\/font>)?<\/a>+?/g
-            var data = pg==1?[]:$("list").data
-            
             let match=reg.exec(resp.data)
             while(match)
             {
               data.push({label:{text:match[3]},url:match[1]})
               match=reg.exec(resp.data)
             }
-            
+            *********/
+           let posts = resp.data.replace(/\n|\r/g,"").match(/<td class="tal"(.*?)<\/h3>/g)
+
+            //标题正则
+            //"<td class="tal" style="padding-left:8px" id=""> 		↑3		<h3><a href="read.php?tid=5877" target="_blank" id=""><b><font color="red">草榴官方客戶端 &amp; 大陸入口 &amp; 永久域名 ** 必須加入收藏夾 9.13更新</font></b></a></h3>"
+            const texts = posts.filter((i)=>{return !/↑/.test(i) && !/read.php/.test(i) })
+
+            texts.forEach(text=>{
+                const title = text.replace(/<.*?>/g,"").replace(/\s/g,"")
+                const url = text.match(/href="(.*?)"/)[1]
+                data.push({label:{text:title},url:url})
+            })
             $("list").data = data
             $("list").endFetchingMore()
         }
