@@ -11,7 +11,7 @@ $cache.set("pg", 1)
 //let gdata=[]
 //var urlt = "https://" + $text.base64Decode("NjI3LndvcmthcmVhNy5saXZlLw==");
 //var urlt="https://91porn.com/"
-var urlt = "https://0122.workarea1.live/"
+var urlt = "http://0122.workarea1.live/"
 console.log(urlt)
 var data = [{ "name": "最近加精", "id": "rf" }, 
             { "name": "当前最热", "id": "hot" }, 
@@ -218,7 +218,8 @@ function geturl(item){
           //console.log(code);
           videourl = eval(code);          
           console.log(videourl);
-          videourl = videourl.match(/(http.*?)['"]/)[1].replace(/http:\/\/.*?\//,"http://185.38.13.131/");
+          videourl = videourl.match(/(http.*?)['"]/)[1]
+          //.replace(/http:\/\/.*?\//,"http://185.38.13.131/");
           //http://185.38.13.131//mp43/356119.mp4?st=GJR-mR9l4HQTbQvOAlPQfg&e=1581798734
           }else{
             videourl=videourl[1]
