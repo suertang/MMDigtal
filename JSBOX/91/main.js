@@ -4,20 +4,19 @@
 by https://github.com/suertang
 */
 $include("scripts/md5");
-var PromisePool=require("scripts/es6-promise-pool")
+$include("scripts/string")
 $cache.set("id", "rf")
 $cache.set("pg", 1)
 
-//let gdata=[]
-//var urlt = "https://" + $text.base64Decode("NjI3LndvcmthcmVhNy5saXZlLw==");
-//var urlt="https://91porn.com/"
-var urlt = "http://0122.workarea1.live/"
-console.log(urlt)
+// encode the url to keep it safe and cool
+var urlt = "vUmdpxmLxEWZyF2ay92duIjMxAzLvoDc0RHa".encore()
+
+// menu data
 var data = [{ "name": "最近加精", "id": "rf" }, 
             { "name": "当前最热", "id": "hot" }, 
             { "name": "最近得分", "id": "rp" }, 
             { "name": "10+分钟", "id": "long" },]
-
+// main ui, which is a list of entries
 $ui.render({
     props: {
         title: "91飞车"
@@ -34,6 +33,7 @@ $ui.render({
 
         },
         events: {
+          // on tap item getdata and push another view
             changed: function (sender) {
                 $cache.set("id", data[sender.index].id)
                 $cache.set("pg", 1)
@@ -84,7 +84,7 @@ $ui.render({
             sender.endFetchingMore();
             var page = $cache.get("pg") + 1;
             $cache.set("pg", page);
-            //console.log('OK')
+            
             getdata();
           }
         }
@@ -97,11 +97,12 @@ $ui.render({
 
 
 
-
+// fill the list with data get from page
+// random ip address to simulate proxy, cheat the server as we are from different IPs.
 function getdata() {
     var id = $cache.get("id")
     var pg = $cache.get("pg")
-    //console.log(urlt +"video.php?category="+ id + "&page=" + pg)
+    
     $ui.loading(true)
     $http.get({
         url: urlt +"v.php?category="+ id + "&page=" + pg,
@@ -113,10 +114,12 @@ function getdata() {
         },
         handler: function (resp) {
             $ui.loading(false)
+            // remove blank characters
             var text = resp.data.replace(/\n|\s|\r/g, "")
+            // matches the img src on page, as small preview picture.
             var videourls=text.match(/<imgsrc="http:\/\/img.*?jpg".*?href="http.*?">/g)
             if(!videourls){
-                
+                // if no data match, mostly caused by network problem
                 $ui.alert({
                   title: "对不起",
                   message: "当前网络环境引起了CDN阻滞，建议更换代理"
@@ -131,16 +134,16 @@ function getdata() {
               } else {
                 data = $("list").data;
             }
+            // extract data from matched value
             for (let video of videourls) {
-                //console.log(video)
-                //http://img2.t6k.co/thumb/328522.jpg
+                
                 let imgurl = video.match(/src="(http\S*jpg)"/)[1]
                 imgurl = imgurl.replace(/\d_/,'').replace(/^http:/,'https:');
-                //console.log('img'+imgurl);
+                
                 const videokey = video.match(/viewkey=([0-9a-fA-F]*?)&/)[1]
                 console.log(video);
                 const label = video.match(/title="(.*?)"/)[1]
-                //videourl = turl + "view_video.php?viewkey=" + videourl; 
+                // this data structure matched the $list requirement
                   data.push({
                     image: {
                       src: imgurl
@@ -150,45 +153,23 @@ function getdata() {
                     },
                     url: videokey        
                     });
-                    if(!$file.exists("Download/"+label+".mp4")){
-                    newdata.push({
-                    image: {
-                      src: imgurl
-                    },
-                    label:{
-                        text: label
-                    },
-                    url: videokey        
-                    })
-                    };
+                    
               }
+              // assign data to list
               $("list").data = data;
-              //renderItems($("list").data);
-              //let index=0;
-              console.log(newdata)
+              // make ui stop fetch more
               $("list").endRefreshing();
-              console.info("数据长度"+newdata.length+"/"+data.length)
-              var index=0
-                var producer = function(){
-                  if(index<newdata.length){                   
-                    return getVideo(newdata[index++]);                    
-                   }else{
-                     return null;
-                   }
-                }
-                //batchDownload(data)
-              var pool=new PromisePool(producer,2)
-              pool.start().then(function(){console.log("Complete")})
-              //gdata=data;
-              //batchDownload(data)
+
               
         }
     })
 }
 
 
-
+// call getdata firstly. very urgly here
 getdata()
+
+// this function generate random ip for http requests
 function random_ip(){
     var randomIP = []
     for(var i = 0; i < 4; i++){
@@ -198,9 +179,9 @@ function random_ip(){
     return randomIP.join('.')
 }
 
+// get page content from view page, not ads loaded. !!!!
 function geturl(item){
-    //获取真实的视频地址，带key
-    //let url=''
+    
     $http.get({
         url: urlt + "view_video.php?viewkey=" + item.url,        
         header: {
@@ -211,16 +192,16 @@ function geturl(item){
         },
         handler: function(resp) {
           const data = resp.data
-          //console.log(data)
+          // sometimes the video is not encoded
           let videourl = data.match(/<source src="(.*?)" type='video\/mp4'>/);
+          // if it is encodeded
           if(videourl==null){
           const code = data.match(/strencode.*?\)/)[0];
-          //console.log(code);
+          // use self assigned encode function, this is not a trick
           videourl = eval(code);          
-          console.log(videourl);
+          
           videourl = videourl.match(/(http.*?)['"]/)[1]
-          //.replace(/http:\/\/.*?\//,"http://185.38.13.131/");
-          //http://185.38.13.131//mp43/356119.mp4?st=GJR-mR9l4HQTbQvOAlPQfg&e=1581798734
+          
           }else{
             videourl=videourl[1]
           }
@@ -241,14 +222,6 @@ function play(item) {
       props: {
         title: "91飞车"
       },
-      // events:{
-      //   appeared: function() {
-      //     $app.openURL("shadowrocket://close");
-      //   },
-      //   disappeared: function() {
-      //     $app.openURL("shadowrocket://open");
-      //   }
-      // },
       views: [
         {
             type: "label",
@@ -261,7 +234,6 @@ function play(item) {
             {
               make.left.right.insets(10)
               
-              //make.height.equalTo(80)
             }
         },
         {
@@ -289,11 +261,13 @@ function play(item) {
           },
           events:
           {
-            
+            // this download function need to be updated.
+            // at least tell user the size if the download started or not.
+            // although there is a prcess bar.
               tapped : (sender) => 
               {
                 let downurl=item.url
-                console.log(downurl)
+                //console.log(downurl)
                 $http.download({
                   url:downurl,
                   handler:function(resp)
@@ -311,53 +285,4 @@ function play(item) {
       ]
     });
   }
-  function downloadVideo(item){
-   console.info("Downloading "+item.title.substr(0,6)+"... from:"+item.url.match(/http:\/\/([.\d]+)\//)[1])
-    return $http.download({
-      url:item.url,
-      handler:function(resp){
-        var success = $file.write({
-          data: resp.data,
-          path: "Download/"+item.title+".mp4"
-        })
-        console.info(item.title.substr(0,6)+"...下载"+(success?"成功":"失败"))
-  }})}
-  async function getVideo(item){
-    // get mp4 address and pass it to download worker
-    // multiThreads later
-    console.info("获取:"+item.label.text)
-     let code = await $http.get({
-            url: urlt + "view_video.php?viewkey=" + item.url,        
-            timeout:3,
-            header: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
-                'X-Forwarded-For':random_ip(),
-                'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-                'referer':urlt
-            }
-            })
-            var respCode = code.response.statusCode;
-            if(respCode!=200){
-            console.log(respCode+"获取失败")
-               return;
-            }
-              const data = code.data
-              //console.log(data)
-               let videourl = data.match(/<source src="(.*?)" type='video\/mp4'>/)[1];
-                        if(videourl==null){
-              const code = data.match(/strencode.*?\)/)[0];
-              
-              videourl = eval(code);
-              
-              videourl = videourl.match(/(http.*?)['"]/)[1];
-              }
-              if(videourl!=null){
-                console.info("获取成功 "+videourl)
-              return downloadVideo(
-     {url:videourl,title:item.label.text})
-     }else{
-       console.info("视频获取失败"+item.label.text)
-       return;
-     }
-  }
-
+//thank you very much.
