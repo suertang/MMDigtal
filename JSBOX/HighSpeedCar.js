@@ -9,7 +9,7 @@
 
 $cache.set("id", "111")
 $cache.set("pg", 1)
-var urlt = "https://w1.97xzjpzz.info/"
+var urlt = "请自行获取地址"
 var data = [{ "name": "亚洲", "id": "111" }, { "name": "日本", "id": "112" }, { "name": "欧美", "id": "113" }]
 
 $ui.render({

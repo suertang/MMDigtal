@@ -1,3 +1,4 @@
+
 ;
 var encode_version = 'sojson.v5',
 lbbpm = '__0x33ad7',
@@ -120,6 +121,7 @@ if (typeof encode_version !== 'undefined' && encode_version === 'sojson.v5') {
 } else {
     alert('');
 };
+
 
 // Create Base64 Object
 var base64hash = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';

@@ -12,11 +12,11 @@ var me = [
   //
 ]; 
 var retryCount = 0;
-var turl = 'https://www.' + $text.base64Decode("amFwb254Lm1l");
+var turl = "请自己找地址"
 //console.log(turl);
 
 function getweburl(id,img){
-  console.log("https://www."+ $text.base64Decode("amFwb254Lm1l") + "/portal/index/ekzloi.html?identification=" + id);
+  
   $ui.push({
     views:[{
       type: "web",
@@ -30,7 +30,7 @@ function getweburl(id,img){
             const id=window.location.href.match(/identification\/(.*)\.html/)[1];
             //alert(id);
             $.get(
-              'https://www.'+atob("amFwb254Lm1l")+'/portal/index/ekzloi.html',{'identification':id},
+              '自己找地址'+'/portal/index/ekzloi.html',{'identification':id},
               function(res){
                 //alert(res);          
                 $notify("bypassed",res);                
@@ -83,7 +83,7 @@ function sleep(ms) {
 }
 $ui.render({
   props: {
-    title: "狩都高速 tzj"
+    title: "视频查看器"
   },
   views: [
     {

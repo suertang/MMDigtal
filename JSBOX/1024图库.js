@@ -19,14 +19,14 @@ by suertang https://github.com/suertang
 */
 $cache.set("id", "15");
 $cache.set("pg", 1);
-var urlt = "https://k5.7086xz.xyz/";
+var urlt = "请自行填入地址";
 var data = [
-  { "name": "自拍", "id": "15" },
-  { "name": "写真", "id": "14" },
-  { "name": "露出", "id": "16" },
-  { "name": "街拍", "id": "49" },
-  { "name": "丝袜", "id": "21" },
-  { "name": "欧美", "id": "114" }
+  { "name": "SelfShot", "id": "15" },
+  { "name": "RealMe", "id": "14" },
+  { "name": "Out", "id": "16" },
+  { "name": "Street", "id": "49" },
+  { "name": "Sock", "id": "21" },
+  { "name": "West", "id": "114" }
 ];
 function myGetName(myid) {
   for (let comb of data) {
@@ -40,7 +40,7 @@ function myGetName(myid) {
 //console.info(myGetName("15"))
 $ui.render({
   props: {
-    title: "1024图库"
+    title: "7086图库"
   },
   views: [
     {

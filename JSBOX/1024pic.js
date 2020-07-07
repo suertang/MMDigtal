@@ -8,10 +8,10 @@ by https://github.com/suertang
 */
 $cache.set("id", "16")
 $cache.set("pg", 1)
-var urlt = "https://cl.dc72.xyz/"
+var urlt = "请自行获取地址"
 
-var data = [{ "name": "达盖尔的旗帜", "id": "16" }, 
-            { "name": "新时代的我们", "id": "8" }, ]
+var data = [{ "name": "盖区", "id": "16" }, 
+            { "name": "新区", "id": "8" }, ]
 /// helper functions
 function myGetName(myid) {
     for (let comb of data) {

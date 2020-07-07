@@ -5,21 +5,23 @@ by https://github.com/suertang
 */
 $include("scripts/md5");
 $include("scripts/string")
-$cache.set("id", "rf")
+$cache.set("id", "latest-updates")
 $cache.set("pg", 1)
 
-// encode the url to keep it safe and cool
-var urlt = "请自行填入地址"
 
+
+// encode the url to keep it safe and cool
+var urlt = "请自行填入海草的地址"
+
+//console.log(urlt)
 // menu data
-var data = [{ "name": "最近加精", "id": "rf" }, 
-            { "name": "当前最热", "id": "hot" }, 
-            { "name": "最近得分", "id": "rp" }, 
-            { "name": "10+分钟", "id": "long" },]
+var data = [{ "name": "最新", "id": "latest-updates" }, 
+            { "name": "佳作", "id": "most-popular" }, 
+            { "name": "合集", "id": "channels" },]
 // main ui, which is a list of entries
 $ui.render({
     props: {
-        title: "数字视频查看器"
+        title: "海草飞车"
     },
     views: [{
         type: "menu",
@@ -102,28 +104,26 @@ $ui.render({
 function getdata() {
     var id = $cache.get("id")
     var pg = $cache.get("pg")
-    
+    console.log(`${urlt+id}/${pg}/`)
     $ui.loading(true)
     $http.get({
-        url: urlt +"v.php?category="+ id + "&page=" + pg,
+        url: pg==1?`${urlt}${id}/`:`${urlt}${id}/${pg}/`,
         header: {
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Version/12.0 Safari/604.1',
-            'X-Forwarded-For':random_ip(),
-            'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-            'referer':urlt
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
         },
         handler: function (resp) {
             $ui.loading(false)
             // remove blank characters
             var text = resp.data.replace(/\n|\s|\r/g, "")
             // matches the img src on page, as small preview picture.
-            var videourls=text.match(/<imgsrc="http:\/\/img.*?jpg".*?href="http.*?">/g)
+            var videourls=text.match(/<divclass="item(.*?)<\/div>/g)
             if(!videourls){
                 // if no data match, mostly caused by network problem
                 $ui.alert({
                   title: "对不起",
                   message: "当前网络环境引起了CDN阻滞，建议更换代理"
                 })
+                console.log(text)
                 return
             }
             
@@ -137,10 +137,10 @@ function getdata() {
             // extract data from matched value
             for (let video of videourls) {
                 
-                let imgurl = video.match(/src="(http\S*jpg)"/)[1]
-                imgurl = imgurl.replace(/\d_/,'').replace(/^http:/,'https:');
-                
-                const videokey = video.match(/viewkey=([0-9a-fA-F]*?)&/)[1]
+                let imgurl = video.match(/data-original="(http\S*jpg)"/)[1]
+                imgurl = imgurl.replace(/\d_/,'');
+                console.log(video);
+                const videokey = video.match(/videos\/(\d+?)\//)[1]
                 console.log(video);
                 const label = video.match(/title="(.*?)"/)[1]
                 // this data structure matched the $list requirement
@@ -181,29 +181,23 @@ function random_ip(){
 
 // get page content from view page, not ads loaded. !!!!
 function geturl(item){
-    
+    console.log(urlt + `embed/${item.url}/`)
     $http.get({
-        url: urlt + "view_video.php?viewkey=" + item.url,        
+        url: urlt + `embed/${item.url}/`,        
         header: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
-            'X-Forwarded-For':random_ip(),
-            'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-            'referer':urlt
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
         },
         handler: function(resp) {
           const data = resp.data
           // sometimes the video is not encoded
-          let videourl = data.match(/<source src="(.*?)" type='video\/mp4'>/);
+          let videourl = data.match(/https:(\S*?)embed=true/);
           // if it is encodeded
           if(videourl==null){
-          const code = data.match(/strencode.*?\)/)[0];
-          // use self assigned encode function, this is not a trick
-          videourl = eval(code);          
-          
-          videourl = videourl.match(/(http.*?)['"]/)[1]
-          
+            console.log(data)
+            $ui.toast("没有发现视频地址");
+            return
           }else{
-            videourl=videourl[1]
+            videourl=videourl[0]
           }
           play({
               text:item.label.text,
@@ -220,7 +214,7 @@ function play(item) {
     
     $ui.push({
       props: {
-        title: "91飞车"
+        title: "海草飞车"
       },
       views: [
         {
