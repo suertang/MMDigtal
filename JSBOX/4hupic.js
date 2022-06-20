@@ -7,7 +7,7 @@ by suertang https://github.com/suertang
 $cache.set("id", "toupai");
 $cache.set("pg", 1);
 
-var urlt = "https://www.4hu18m.com/";
+var urlt = $text.base64Decode('aHR0cHM6Ly8zOWtrLm5ldA==');
 var data = [
   { "name": "自拍", "id": "toupai" },
   { "name": "美腿", "id": "meitui" },
