@@ -7,7 +7,7 @@ by suertang https://github.com/suertang
 $cache.set("id", "toupai");
 $cache.set("pg", 1);
 
-var urlt = $text.base64Decode('aHR0cHM6Ly8zOWtrLm5ldA==');
+var urlt = $text.base64Decode('aHR0cHM6Ly8zOWtrLm5ldA==') + "/";
 var data = [
   { "name": "自拍", "id": "toupai" },
   { "name": "美腿", "id": "meitui" },
@@ -121,7 +121,7 @@ function getdata() {
       $ui.loading(false);
       if (!resp.response) {
         console.log("no response");
-        alert("网站没有响应");
+        $ui.alert("网站没有响应");
         return;
       } else {
         // console.log(resp);
