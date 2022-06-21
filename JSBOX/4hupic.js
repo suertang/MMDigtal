@@ -7,7 +7,7 @@ by suertang https://github.com/suertang
 $cache.set("id", "toupai");
 $cache.set("pg", 1);
 
-var urlt = $text.base64Decode('aHR0cHM6Ly8zOWtrLm5ldA==') + "/";
+var urlt = $text.base64Decode('aHR0cHM6Ly93d3cuODNzcy5uZXQv');
 var data = [
   { "name": "自拍", "id": "toupai" },
   { "name": "美腿", "id": "meitui" },
@@ -109,7 +109,11 @@ $ui.render({
 });
 
 function getdata() {
-  let url = urlt + "pic/";
+  let cacheurl = $cache.get("urlt")
+  let url = cacheurl ? cacheurl : urlt
+  
+  $ui.toast(url)
+  url = url + "pic/"
   var id = $cache.get("id");
   var pg = $cache.get("pg");
   let suffix = pg == 1 ? "" : "index_" + pg + ".html";
@@ -119,20 +123,20 @@ function getdata() {
     timeout: 5,
     handler: function(resp) {
       $ui.loading(false);
-      if (!resp.response) {
-        console.log("no response");
+      if (resp.error) {
+        // console.log("no response");
         $ui.alert("网站没有响应");
         return;
       } else {
         // console.log(resp);
-        $cache.set("urlt", url);
+        //$cache.set("urlt", url);
       }
       if (
         resp.response.statusCode != 200 ||
         !resp.response.url.startsWith(url)
       ) {
-        console.log("地址跳转到" + resp.response.url);
-        $cache.set("urlt", resp.response.url);
+        $ui.toast("地址跳转到" + resp.response.url.match(/(https?:\/\/.*?\/)/)[1]);
+        $cache.set("urlt", resp.response.url.match(/(https?:\/\/.*?\/)/)[1]);
         
         
         getdata();
@@ -168,20 +172,21 @@ function getdata() {
 }
 
 getdata();
-String.prototype.getMatchGroup = function(reg, group) {
-  let matches = this.match(reg);
-  if (matches != null) {
-    return matches.map(i => {
-      return i.replace(reg, "$" + group);
-    });
-  }
-  return null;
-};
+
 function loadPage(url, title) {
+  let cacheurl = $cache.get("urlt")
+  
+  let urlt = cacheurl?cacheurl:urlt
+  
   $cache.set("title",title)
   $http.get({
     url: urlt + url,
     handler: function(resp) {
+      if(resp.error){
+        $ui.alert("发生错误或超时")
+        $ui.toast(resp.error)
+        return
+      }
       $ui.loading(false);
       var text = resp.data.replace(/\n|\s|\r/g, "");
       // console.log(text);
@@ -190,13 +195,13 @@ function loadPage(url, title) {
         return;
       }
       var ingz = "";
-      text.getMatchGroup(/imgsrc='(.*?)'/g, 1).forEach((it, i) => {
-        //ingz += `<img src="${i}">`;
-
-        ingz += `<img class="lazyload" src="https://fakeimg.pl/200x200/" data-src="${it}" data-sizes="auto">`;
+      
+      const img = text.match(/imgsrc='(.*?)'/g).forEach(i=>{
+        const it = i.match(/'(.*)'/)[1]
+        ingz += `<img class="lazyload" src="https://fakeimg.pl/200x200/" data-src="${it}" data-sizes="auto">\n`;
       });
 
-      console.info(ingz);
+      // console.info(ingz);
       const style = `
             <style>
             body{
