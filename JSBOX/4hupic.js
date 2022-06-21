@@ -347,7 +347,7 @@ function getnext() {
   const maxIndex = $("mat").data.length;
   let row = currentindex.row;
   if (row == maxIndex - 2) {
-    alert("最后一个了");
+    $ui.alert("最后一个了");
     return;
   } else {
     //$ui.pop()
@@ -368,7 +368,7 @@ function getprev() {
   const currentindex = $cache.get("index");
   let row = currentindex.row;
   if (row == 0) {
-    alert("已经是第一个");
+    $ui.alert("已经是第一个");
     return;
   } else {
     const idx = $indexPath(row - 1, row - 1);
