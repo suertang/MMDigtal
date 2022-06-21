@@ -277,7 +277,7 @@ function geting(id, mc, index) {
            $ui.get("myweb").title=$cache.get("title")
          },
           didReachBottom: function(sender) {
-            alert("滑到底了！！！");
+            $ui.alert("滑到底了！！！");
           }
         }
       },
