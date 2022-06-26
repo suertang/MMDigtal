@@ -196,7 +196,7 @@ function loadPage(url, title) {
       }
       var ingz = "";
       
-      const img = text.match(/imgsrc='(.*?)'/g).forEach(i=>{
+      text.match(/imgsrc='(.*?)'/g).forEach(i=>{
         const it = i.match(/'(.*)'/)[1]
         ingz += `<img class="lazyload" src="https://fakeimg.pl/200x200/" data-src="${it}" data-sizes="auto">\n`;
       });
