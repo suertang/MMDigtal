@@ -1,5 +1,5 @@
 
-var obj = $response.body;
+var obj = JSON.parse($response.body);
 var nor = {
         "status" : "STATUS_OK",
         "message" : "正常资源",
