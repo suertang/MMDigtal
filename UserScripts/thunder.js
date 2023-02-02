@@ -6,6 +6,11 @@ var nor = {
         "title" : ""
       }
 // console.log(body.files)
-obj.files.map((x) => x.audit = Object.create(nor))
+// obj.files.map((x) => x.audit = Object.create(nor))
+
+for(var item of obj.files){
+  item.audit = Object.create(nor)
+}
+
 body = JSON.stringify(obj);
 $done({body});
