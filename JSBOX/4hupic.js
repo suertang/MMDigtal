@@ -7,7 +7,7 @@ by suertang https://github.com/suertang
 $cache.set("id", "toupai");
 $cache.set("pg", 1);
 
-var urlt = $text.base64Decode('aHR0cHM6Ly93d3cuODNzcy5uZXQv');
+var urlt = "https://4hu.tv/"//$text.base64Decode('aHR0cHM6Ly93d3cuODNzcy5uZXQv');
 var data = [
   { "name": "自拍", "id": "toupai" },
   { "name": "美腿", "id": "meitui" },
@@ -144,15 +144,23 @@ function getdata() {
         return;
       }
       
-      let data = resp.data;
-      const res = data.match(/<dt><a href="\/view\/.*<\/dt>/g).map(i => {
-        //console.log(i)
+      let data = resp.data.replace(/>(\s+)</g,"><");
+      console.log(data)
+      /* 			<dl>
+ 	<dt><a href="/view/202401/79306.html" target="_blank"><img class="nature" src="/images/loading.svg" data-original="https://img.997pp.com/Tu/202312/xjdljkplgsm.jpg"/><i></i></a></dt>
+ 	<dd><a href="/view/202401/79306.html" target="_blank"><h3><script type="text/javascript">document.write(d('5paw5aWz5Y+L6KaB5rGC5LiN5oi05aWX5pON5aW55oOz57uR5L2P5oiRWzEwUF0='));</script></h3>
+ </a></dd>
+ </dl>
+ */
+      const res = data.match(/<dl>.*?original.*?document\.write.*?<\/dl>/g).map(i => {
+        console.log(i)
         const ret = {
           img: {
             src: i.match(/original="(.*?)"/)[1]
           },
           label: {
-            text: i.match(/title="(.*?)"/)[1]
+            text:
+            $text.base64Decode(i.match(/d\('(.*?)'/)[1])
           },
           url: i.match(/href="\/(.*?\.html)/)[1]
         };
@@ -174,9 +182,9 @@ function getdata() {
 getdata();
 
 function loadPage(url, title) {
-  let cacheurl = $cache.get("urlt")
+  // let cacheurl = $cache.get("urlt")
   
-  let urlt = cacheurl?cacheurl:urlt
+  // let urlt = cacheurl?cacheurl:urlt
   
   $cache.set("title",title)
   $http.get({
