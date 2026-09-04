@@ -25,12 +25,12 @@ function u(e={hd:"",sd:"",title:"",dur:""}){const n=(e.title||"xasiat_video").re
 <button id="xpcl" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.25);border:none;color:#fff;font-size:22px;width:44px;height:44px;border-radius:50%;cursor:pointer;">&times;</button>
 </div>
 <script>
-(function(){var D=${JSON.stringify({h:e.hd,s:e.sd,nh:n+"[HD].mp4",ns:n+"[SD].mp4"})};var p=document.getElementById("xsp"),l=document.getElementById("xpl"),v=document.getElementById("xv");
+(function(){var D=${JSON.stringify({h:e.hd,s:e.sd,nh:n+"[HD].mp4",ns:n+"[SD].mp4"})},P="x-player://";var p=document.getElementById("xsp"),l=document.getElementById("xpl"),v=document.getElementById("xv");
 document.getElementById("xsc").onclick=function(){p.style.display="none"};
 function pl(s){if(!s)return;p.style.display="none";v.src=s;l.style.display="block";v.play().catch(function(){})}
 document.getElementById("xpcl").onclick=function(){v.pause();v.removeAttribute("src");v.load();l.style.display="none"};
 document.getElementById("xph").onclick=function(){pl(D.h)};document.getElementById("xps").onclick=function(){pl(D.s)};
-function op(u){if(!u)return;var a=document.createElement("a");a.href=u;a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()}
+function op(u){if(!u)return;var a=document.createElement("a");a.href=P+u;a.target="_blank";document.body.appendChild(a);a.click();a.remove()}
 document.getElementById("xoh").onclick=function(){op(D.h)};document.getElementById("xos").onclick=function(){op(D.s)};
 function dl(u,n){if(!u)return;var a=document.createElement("a");a.href=u;a.download=n;a.target="_blank";document.body.appendChild(a);a.click();a.remove()}
 document.getElementById("xdh").onclick=function(){dl(D.h,D.nh)};document.getElementById("xds").onclick=function(){dl(D.s,D.ns)};
